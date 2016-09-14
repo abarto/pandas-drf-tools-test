@@ -94,3 +94,4 @@ ENV/
 
 # Django project files
 db.sqlite3
+data/
