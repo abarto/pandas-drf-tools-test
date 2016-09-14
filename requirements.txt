@@ -1,3 +1,4 @@
 Django==1.10.1
 djangorestframework==3.4.6
 pandas==0.18.1
+django-extensions==1.7.4
