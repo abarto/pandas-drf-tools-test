@@ -16,6 +16,9 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from census_data.views import DataFrameDictSerializerTestView
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^dict_serializer/$', DataFrameDictSerializerTestView.as_view(), name='dict-serializer')
 ]
