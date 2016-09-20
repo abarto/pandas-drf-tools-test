@@ -6,7 +6,8 @@ from os import path
 from django.core.exceptions import ImproperlyConfigured
 from rest_framework import response, views
 
-from pandas_drf_tools.serializers import DataFrameDictSerializer
+from pandas_drf_tools.serializers import (DataFrameListSerializer, DataFrameIndexSerializer,
+                                          DataFrameRecordsSerializer)
 
 
 @lru_cache()
@@ -21,14 +22,17 @@ def get_cc_est2015_alldata_df():
     return cc_est2015_alldata_df
 
 
-class DataFrameDictSerializerTestView(views.APIView):
+class DataFrameSerializerTestView(views.APIView):
+    def get_serializer_class(self):
+        raise NotImplementedError()
+
     def get(self, request, *args, **kwargs):
         sample = get_cc_est2015_alldata_df().sample(10)
-        serializer = DataFrameDictSerializer(sample)
+        serializer = self.get_serializer_class()(sample)
         return response.Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-        serializer = DataFrameDictSerializer(data=request.data)
+        serializer = self.get_serializer_class()(data=request.data)
         serializer.is_valid(raise_exception=True)
         data_frame = serializer.validated_data
         data = {
@@ -36,3 +40,19 @@ class DataFrameDictSerializerTestView(views.APIView):
             'len': len(data_frame)
         }
         return response.Response(data)
+
+
+class DataFrameListSerializerTestView(DataFrameSerializerTestView):
+    def get_serializer_class(self):
+        return DataFrameListSerializer
+
+
+class DataFrameIndexSerializerTestView(DataFrameSerializerTestView):
+    def get_serializer_class(self):
+        return DataFrameIndexSerializer
+
+
+class DataFrameRecordsSerializerTestView(DataFrameSerializerTestView):
+    def get_serializer_class(self):
+        return DataFrameRecordsSerializer
+

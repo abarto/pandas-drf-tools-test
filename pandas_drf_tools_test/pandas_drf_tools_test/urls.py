@@ -16,9 +16,15 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from census_data.views import DataFrameDictSerializerTestView
+from census_data.views import (DataFrameListSerializerTestView, DataFrameIndexSerializerTestView,
+                               DataFrameRecordsSerializerTestView)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^dict_serializer/$', DataFrameDictSerializerTestView.as_view(), name='dict-serializer')
+    url(r'^list_serializer_test/$', DataFrameListSerializerTestView.as_view(),
+        name='list-serializer-test'),
+    url(r'^index_serializer_test/$', DataFrameIndexSerializerTestView.as_view(),
+        name='index-serializer-test'),
+    url(r'^records_serializer_test/$', DataFrameRecordsSerializerTestView.as_view(),
+        name='records-serializer-test')
 ]
