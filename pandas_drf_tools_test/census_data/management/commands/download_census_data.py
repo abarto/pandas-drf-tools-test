@@ -23,9 +23,9 @@ class Command(BaseCommand):
             mkdir(data_directory)
 
         logger.info('Downloading "CC-EST2015-ALLDATA.csv"')
-        with urlopen('https://www.census.gov/popest/data/counties/asrh/2015/files/CC-EST2015-ALLDATA.csv') as f:
-            cc_est2015_alldata_df = pd.read_csv(f, encoding='latin1',
-                                                dtype={'SUMLEV': 'str', 'STATE': 'str', 'COUNTY': 'str'})
+        with urlopen('https://www.census.gov/popest/data/counties.html/asrh/2015/files/CC-EST2015-ALLDATA.csv') as f:
+            cc_est2015_alldata_df = pd.read_csv(
+                f, encoding='latin1', dtype={'SUMLEV': 'str', 'STATE': 'str', 'COUNTY': 'str'})
 
             output_file = path.join(data_directory, 'CC-EST2015-ALLDATA.pkl')
             logger.info('Pickling read data frame to "%s"', output_file)

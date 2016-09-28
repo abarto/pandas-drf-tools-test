@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block population_nav_class %}active{% endblock %}
+{% block title %}Counties{% endblock %}
+{% block page_title %}Top 10 Counties for {{ STATE_NAME }} ({{ state_fips_code }} - {{ STUSAB }}){% endblock %}
+{% block extra_js %}
+<script>
+    var stateFipsCode = "{{ state_fips_code }}";
+</script>
+<script src="{% static 'js/counties.js' %}"></script>
+{% endblock extra_js %}
