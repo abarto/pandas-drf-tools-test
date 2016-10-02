@@ -26,25 +26,17 @@
                     <a class="navbar-brand" href="#">pandas-drf-tools-test</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li class="{% block population_nav_class %}{% endblock %}"><a href="#">Population Estimates</a></li>
-                    <li class="{% block list_nav_class %}{% endblock %}"><a href="#">Test List Serializer</a></li>
-                    <li class="{% block index_nav_class %}{% endblock %}"><a href="#">Test Index Serializer</a></li>
-                    <li class="{% block records_nav_class %}{% endblock %}"><a href="#">Test Records Serializer</a></li>
+                    <li class="{% block population_nav_class %}{% endblock population_nav_class %}"><a href="{% url 'states' %}">Population Estimates</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">GitHub</a></li>
                 </ul>
             </div>
         </nav>
-        <div class="chart-container">
-            <div class="chart-title">{% block page_title %}{% endblock %}</div>
-            <svg class="chart"></svg>
-        </div>
+        {% block content %}{% endblock content %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.6/d3.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
         {% block extra_js %}{% endblock extra_js %}
     </body>
 </html>
