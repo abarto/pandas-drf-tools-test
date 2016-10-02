@@ -3,14 +3,12 @@ import pandas as pd
 from functools import lru_cache
 from os import path
 
+from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured
 from django.views.generic import TemplateView
-from rest_framework import response, views
 
-from pandas_drf_tools.viewsets import ReadOnlyDataFrameViewSet
-from pandas_drf_tools.serializers import (DataFrameListSerializer, DataFrameIndexSerializer,
-                                          DataFrameRecordsSerializer,
-                                          DataFrameReadOnlyToDictRecordsSerializer)
+from pandas_drf_tools.viewsets import DataFrameViewSet, ReadOnlyDataFrameViewSet
+from pandas_drf_tools.serializers import DataFrameReadOnlyToDictRecordsSerializer, DataFrameRecordsSerializer
 from pandas_drf_tools.pagination import LimitOffsetPagination
 
 
@@ -40,39 +38,20 @@ def get_state_df():
     return state_df
 
 
-class DataFrameSerializerTestView(views.APIView):
-    def get_serializer_class(self):
-        raise NotImplementedError()
+def get_nst_est2015_alldata_df():
+    df = cache.get('nst_est2015_alldata_df')
 
-    def get(self, request, *args, **kwargs):
-        sample = get_cc_est2015_alldata_df().sample(20)
-        serializer = self.get_serializer_class()(sample)
-        return response.Response(serializer.data)
+    if df is None:
+        try:
+            data = path.join(path.abspath(path.dirname(__file__)), 'data')
+            df = pd.read_pickle(path.join(data, 'NST-EST2015-alldata.pkl'))
+            df = df[df.SUMLEV == '040'][['STATE', 'NAME', 'POPESTIMATE2015']].reset_index(drop=True)
+            cache.set('nst_est2015_alldata_df', df)
+        except FileNotFoundError as e:
+            raise ImproperlyConfigured(
+                'Missing data file. Please run the "download_census_data" management command.') from e
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer_class()(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        data_frame = serializer.validated_data
-        data = {
-            'columns': list(data_frame.columns),
-            'len': len(data_frame)
-        }
-        return response.Response(data)
-
-
-class DataFrameListSerializerTestView(DataFrameSerializerTestView):
-    def get_serializer_class(self):
-        return DataFrameListSerializer
-
-
-class DataFrameIndexSerializerTestView(DataFrameSerializerTestView):
-    def get_serializer_class(self):
-        return DataFrameIndexSerializer
-
-
-class DataFrameRecordsSerializerTestView(DataFrameSerializerTestView):
-    def get_serializer_class(self):
-        return DataFrameRecordsSerializer
+    return df
 
 
 class CountiesView(TemplateView):
@@ -119,3 +98,10 @@ class CountyEstimatesViewSet(ReadOnlyDataFrameViewSet):
     def filter_dataframe(self, dataframe):
         dataframe = dataframe[dataframe.STATE == self.request.query_params['state']]
         return dataframe
+
+
+class TestDataFrameViewSet(DataFrameViewSet):
+    serializer_class = DataFrameRecordsSerializer
+
+    def get_dataframe(self):
+        return get_nst_est2015_alldata_df()

@@ -129,6 +129,13 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'django_cache')
+    }
+}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

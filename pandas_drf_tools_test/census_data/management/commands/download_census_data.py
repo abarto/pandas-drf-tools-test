@@ -22,7 +22,7 @@ class Command(BaseCommand):
             logger.info('Creating data directory "%s"', data_directory)
             mkdir(data_directory)
 
-        logger.info('Downloading "CC-EST2015-ALLDATA.csv"')
+        logger.info('Downloading "CC-EST2015-ALLDATA.csv..."')
         with urlopen('https://www.census.gov/popest/data/counties.html/asrh/2015/files/CC-EST2015-ALLDATA.csv') as f:
             cc_est2015_alldata_df = pd.read_csv(
                 f, encoding='latin1', dtype={'SUMLEV': 'str', 'STATE': 'str', 'COUNTY': 'str'})
@@ -31,7 +31,16 @@ class Command(BaseCommand):
             logger.info('Pickling read data frame to "%s"', output_file)
             cc_est2015_alldata_df.to_pickle(output_file)
 
-        logger.info('Downloading "state.txt"')
+        logger.info('Downloading "NST-EST2015-alldata.csv..."')
+        with urlopen('https://www.census.gov/popest/data/national/totals/2015/files/NST-EST2015-alldata.csv') as f:
+            nst_est2015_alldata_df = pd.read_csv(
+                f, encoding='latin1', dtype={'SUMLEV': 'str', 'STATE': 'str'})
+
+            output_file = path.join(data_directory, 'NST-EST2015-alldata.pkl')
+            logger.info('Pickling read data frame to "%s"', output_file)
+            nst_est2015_alldata_df.to_pickle(output_file)
+
+        logger.info('Downloading "state.txt..."')
         with urlopen('https://www2.census.gov/geo/docs/reference/state.txt') as f:
             state_df = pd.read_csv(f, encoding='latin1', sep='|', dtype={'STATE': 'str'})
 
