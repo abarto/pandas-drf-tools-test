@@ -106,17 +106,6 @@ class TestDataFrameViewSet(DataFrameViewSet):
     def get_dataframe(self):
         return get_nst_est2015_alldata_df()
 
-    def _save_dataframe(self, dataframe):
+    def update_dataframe(self, dataframe):
         cache.set('nst_est2015_alldata_df', dataframe)
-
-    def perform_create(self, serializer):
-        dataframe = super().perform_create(serializer)
-        self._save_dataframe(dataframe)
-
-    def perform_update(self, instance, serializer):
-        dataframe = super().perform_update(instance, serializer)
-        self._save_dataframe(dataframe)
-
-    def perform_destroy(self, instance):
-        dataframe = super().perform_destroy(instance)
-        self._save_dataframe(dataframe)
+        return dataframe
