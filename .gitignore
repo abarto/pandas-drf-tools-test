@@ -95,3 +95,8 @@ ENV/
 # Django project files
 db.sqlite3
 data/
+static/
+django_cache/
+
+# Vagrant files
+.vagrant
