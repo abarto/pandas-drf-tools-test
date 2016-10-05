@@ -2,3 +2,5 @@ Django==1.10.1
 djangorestframework==3.4.6
 pandas==0.18.1
 django-extensions==1.7.4
+pandas_drf_tools==0.1.0
+gunicorn==19.6.0
