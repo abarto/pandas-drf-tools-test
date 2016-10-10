@@ -103,6 +103,9 @@ class CountyEstimatesViewSet(ReadOnlyDataFrameViewSet):
 class TestDataFrameViewSet(DataFrameViewSet):
     serializer_class = DataFrameRecordsSerializer
 
+    def index_row(self, dataframe):
+        return dataframe[dataframe.STATE == self.kwargs[self.lookup_url_kwarg]]
+
     def get_dataframe(self):
         return get_nst_est2015_alldata_df()
 

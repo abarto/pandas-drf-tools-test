@@ -108,11 +108,14 @@ def get_nst_est2015_alldata_df():
     return df
 ```
 
-The dataframe is then exposed through a `DataFrameViewSet`, that illustrates how to make the changes stick by implementing the `update_dataframe` method.
+The dataframe is then exposed through a `DataFrameViewSet` that illustrates how to make the changes stick by implementing the `update_dataframe` method. The `index_row` was overridden so we can reference the states based on their FIPS code instead of their position within the dataframe.
 
 ```python
 class TestDataFrameViewSet(DataFrameViewSet):
     serializer_class = DataFrameRecordsSerializer
+
+    def index_row(self, dataframe):
+        return dataframe[dataframe.STATE == self.kwargs[self.lookup_url_kwarg]]
 
     def get_dataframe(self):
         return get_nst_est2015_alldata_df()
@@ -153,8 +156,9 @@ $ curl --silent http://localhost:8000/api/test/ | python -mjson.tool
 
 ...,get the details of a specific row...
 
+
 ```
-$ curl --silent http://localhost:8000/api/test/51/ | python -mjson.tool
+$ curl --silent http://localhost:8000/api/test/72/ | python -mjson.tool
 {
     "columns": [
         "index",
@@ -183,13 +187,13 @@ $ curl --silent -X POST -H "Content-Type: application/json" --data '{"columns":[
 ...update existing rows...
 
 ```
-$ curl --silent -X PUT -H "Content-Type: application/json" --data '{"columns":["index","STATE","NAME","POPESTIMATE2015"],"data":[[52,"YY","Mars",0]]}' http://localhost:8000/api/test/52/
+$ curl --silent -X PUT -H "Content-Type: application/json" --data '{"columns":["index","STATE","NAME","POPESTIMATE2015"],"data":[[52,"YY","Mars",0]]}' http://localhost:8000/api/test/YY/
 ```
 
 ...and delete rows...
 
 ```
-$ curl --silent -X DELETE http://localhost:8000/api/test/52/
+$ curl --silent -X DELETE http://localhost:8000/api/test/YY/
 ```
 
 It provides pretty much the same functionality as regular DRM `ModelViewSet`s.
