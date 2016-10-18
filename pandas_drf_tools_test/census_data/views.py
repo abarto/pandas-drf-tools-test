@@ -54,6 +54,14 @@ def get_nst_est2015_alldata_df():
     return df
 
 
+class StatesView(TemplateView):
+    template_name = 'states.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        return context_data
+
+
 class CountiesView(TemplateView):
     template_name = 'counties.html'
 
