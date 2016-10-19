@@ -21,7 +21,8 @@ from django.views.generic.base import RedirectView, TemplateView
 from rest_framework.routers import DefaultRouter
 
 
-from census_data.views import (StateEstimatesViewSet, CountyEstimatesViewSet, CountiesView, TestDataFrameViewSet)
+from census_data.views import (StateEstimatesViewSet, CountyEstimatesViewSet, CountiesView, StatesView,
+                               TestDataFrameViewSet)
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
@@ -32,7 +33,7 @@ router.register(r'test', TestDataFrameViewSet, base_name='test')
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', RedirectView.as_view(url=reverse_lazy('states')), name='home'),
-    url(r'^states/$', TemplateView.as_view(template_name='states.html'), name='states'),
+    url(r'^states/$', StatesView.as_view(), name='states'),
     url(r'^counties/(?P<state_fips_code>\d{2})/$', CountiesView.as_view(), name='counties'),
     url(r'^api/', include(router.urls)),
 ]

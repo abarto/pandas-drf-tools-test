@@ -30,6 +30,7 @@ Vagrant.configure(2) do |config|
     source pandas_drf_tools_test_venv/bin/activate
     curl --silent --show-error --retry 5 https://bootstrap.pypa.io/get-pip.py | python
 
+    pip install Cython
     pip install -r pandas_drf_tools_test/requirements.txt
 
     cd pandas_drf_tools_test/pandas_drf_tools_test/
