@@ -66,10 +66,6 @@ def get_state_abbreviations():
     return alldata_df['STUSAB'].drop_duplicates().tolist()
 
 
-def get_counties_data_frame(state_fips_code):
-    pass
-
-
 def get_states_plot():
     source = AjaxDataSource(
         data={'STATE': [], 'STNAME': [], 'STUSAB': [], 'TOT_POP': [], 'TOT_MALE': [], 'TOT_FEMALE': []},
